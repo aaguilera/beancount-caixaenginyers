@@ -7,4 +7,3 @@ ACCOUNT_NAME = "Assets:CaixaEnginyers:CompteCorrent"
 CONFIG = [
   caixaenginyers.Importer(ACCOUNT_NAME)
 ]
-
