@@ -7,7 +7,7 @@ class Importer(csv.Importer):
         super().__init__(
             config={
                 csv.Col.PAYEE:    2,
-                csv.Col.DATE:     3,
+                csv.Col.DATE:     1,
                 csv.Col.AMOUNT:   4,
                 csv.Col.BALANCE:  5
             },
