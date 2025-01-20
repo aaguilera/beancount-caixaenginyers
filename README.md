@@ -5,7 +5,7 @@ Un _importer_ per tal de generar transaccions en el format [_Beancount_](https:/
 ## Instal·lació
 
 Copieu el fitxer `caixaenginyers.py` al directori on es troben la resta
-d'importers de Beancount, per exemple, a `~/.local/lib/python3.9/site-packages/beancount/ingest/importers/` o similar.
+d'importers de Beancount, per exemple, a `~/.local/lib/python3.9/site-packages/beancount/ingest/importers/`, `.local/pipx/venvs/beancount/lib/python3.11/site-packages/beancount/ingest/importers`, o similar.
 
 ## Preparació del fitxer de moviments
 
