@@ -4,8 +4,13 @@ Un _importer_ per tal de generar transaccions en el format [_Beancount_](https:/
 
 ## Instal·lació
 
-Copieu el fitxer `caixaenginyers.py` al directori on es troben la resta
-d'importers de Beancount, per exemple, a `~/.local/lib/python3.9/site-packages/beancount/ingest/importers/`, `.local/pipx/venvs/beancount/lib/python3.11/site-packages/beancount/ingest/importers`, o similar.
+Instal·leu les dependències amb `pip`:
+
+```bash
+pip install beancount beangulp
+```
+
+El fitxer `caixaenginyers.py` i `import.py` han d'estar al mateix directori.
 
 ## Preparació del fitxer de moviments
 
@@ -22,7 +27,7 @@ Això us generarà un fitxer CSV anomenat `MovimientosCuenta.csv`.
 
 ## Configuració de l'importer
 
-Editeu el fitxer `importconfig.py` i modifiqueu el nom simbòlic del vostre compte _Beancount_ de Caixa d'Enginyers:
+Editeu el fitxer `import.py` i modifiqueu el nom simbòlic del vostre compte _Beancount_ de Caixa d'Enginyers:
 
 ```python
 ACCOUNT_NAME = "Assets:CaixaEnginyers:CompteCorrent"
@@ -30,10 +35,10 @@ ACCOUNT_NAME = "Assets:CaixaEnginyers:CompteCorrent"
 
 ## Utilització
 
-Suposant que teniu els fitxers `importconfig.py` i `MovimientosCuenta.csv` al directori actual, podeu fer la importació amb la següent comanda:
+Suposant que teniu els fitxers `import.py` i `MovimientosCuenta.csv` al directori actual, podeu fer la importació amb la següent comanda:
 
 ```bash
-bean-extract importconfig.py MovimientosCuenta.csv
+python import.py extract MovimientosCuenta.csv
 ```
 
-Les transaccions es mostraran a la sortida estandard.
+Les transaccions es mostraran a la sortida estàndard.

@@ -1,9 +1,35 @@
-from beancount.ingest.importers import csv
+from beancount.core import data
+from beancount.core.amount import Amount
+from beangulp.importers import csv
 
 
-class Importer(csv.Importer):
+class Categorizer:
 
-    def __init__(self, account_name):
+    def __call__(self, txn, row):
+        concepte = (row[2] or "").upper()
+        if "DEL MOLINO" in concepte:
+            return self._categorize_molino(txn)
+        return txn
+
+    @staticmethod
+    def _categorize_molino(txn):
+        # Example: add a tag to the transaction
+        # txn = txn._replace(tags=frozenset(set(txn.tags) | {"Dinar"}))
+        txn = txn._replace(narration="Dinar")
+        amount = txn.postings[0].units
+        txn.postings.append(
+            data.Posting(
+                "Expenses:Restaurants",
+                Amount(-amount.number, amount.currency),
+                None, None, None, None,
+            )
+        )
+        return txn
+
+
+class Importer(csv.CSVImporter):
+
+    def __init__(self, account_name, categorizer=None):
         super().__init__(
             config={
                 csv.Col.PAYEE:    2,
@@ -14,8 +40,8 @@ class Importer(csv.Importer):
             account=account_name,
             currency="EUR",
             dateutil_kwds={"dayfirst": True},
-            skip_lines=8)
+            skip_lines=8,
+            categorizer=categorizer)
 
     def parse_amount(self, string):
-        # cal transformar les comes a punts
         return super().parse_amount(string.replace(",", "."))
