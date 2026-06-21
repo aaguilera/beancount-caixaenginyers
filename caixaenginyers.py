@@ -1,6 +1,6 @@
 from beancount.core import data
 from beancount.core.amount import Amount
-from beangulp.importers import csv
+from beangulp.importers import csvbase
 
 
 class Categorizer:
@@ -27,22 +27,27 @@ class Categorizer:
         return txn
 
 
-class Importer(csv.CSVImporter):
+class Importer(csvbase.Importer):
 
-    def __init__(self, account_name, categorizer=None):
-        super().__init__(
-            config={
-                csv.Col.PAYEE:    2,
-                csv.Col.DATE:     1,
-                csv.Col.AMOUNT:   4,
-                csv.Col.BALANCE:  5
-            },
-            account=account_name,
-            currency="EUR",
-            dateutil_kwds={"dayfirst": True},
-            skip_lines=8,
-            categorizer=categorizer)
-        # CSVImporter uses composition (self.base = _CSVImporterBase),
-        # so we must inject custom parse_amount into self.base directly
-        base_parse = self.base.parse_amount
-        self.base.parse_amount = lambda s: base_parse(s.replace(",", "."))
+    encoding = "utf8"
+    skiplines = 7
+    names = True
+    order = csvbase.Order.DESCENDING
+
+    date = csvbase.Date("DATA D'OPERACIÓ", frmt="%d/%m/%Y")
+    payee = csvbase.Column("CONCEPTE")
+    narration = csvbase.Column(0)
+    amount = csvbase.Amount("IMPORT", subs={",": "."})
+    balance = csvbase.Amount("SALDO", subs={",": "."})
+
+    def __init__(self, account, categorizer=None):
+        super().__init__(account, "EUR")
+        self.categorizer = categorizer
+
+    def identify(self, filepath):
+        return filepath.lower().endswith(".csv")
+
+    def finalize(self, txn, row):
+        if self.categorizer:
+            return self.categorizer(txn, row)
+        return txn
