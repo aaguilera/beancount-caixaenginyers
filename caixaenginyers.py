@@ -42,6 +42,7 @@ class Importer(csv.CSVImporter):
             dateutil_kwds={"dayfirst": True},
             skip_lines=8,
             categorizer=categorizer)
-
-    def parse_amount(self, string):
-        return super().parse_amount(string.replace(",", "."))
+        # CSVImporter uses composition (self.base = _CSVImporterBase),
+        # so we must inject custom parse_amount into self.base directly
+        base_parse = self.base.parse_amount
+        self.base.parse_amount = lambda s: base_parse(s.replace(",", "."))
