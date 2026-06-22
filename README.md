@@ -4,9 +4,11 @@ Un _importer_ per tal de generar transaccions en el format [_Beancount_](https:/
 
 ## Instal·lació
 
-Instal·leu les dependències amb `pip`:
+Prepareu l'entorn virtual, si s'escau, i instal·leu les dependències amb `pip`:
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install beancount beangulp
 ```
 
