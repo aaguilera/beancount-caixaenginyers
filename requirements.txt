@@ -8,5 +8,5 @@ python-dateutil==2.9.0.post0
 python-magic==0.4.27
 regex==2026.5.9
 six==1.17.0
-soupsieve==2.8.4
+soupsieve==2.9
 typing_extensions==4.15.0
